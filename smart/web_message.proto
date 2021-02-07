@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package WebMessage;
+message Request {
+  enum Type {
+    REQUIRE_STATUS = 0;
+    ALTER_STATUS = 1;
+    LIST_DEVICES = 2;
+  }
+  Type type = 1;
+  int32 target_device_id = 2;
+}
+
+message Response {
+  enum Type {
+    REQUIRE_STATUS = 0;
+    ALTER_STATUS = 1;
+    LIST_DEVICES = 2;
+  }
+  Type type = 1;
+  int32 target_device_id = 2;
+  string body = 3;
+}
