@@ -11,14 +11,12 @@ class ServerSocket
   def initialize(devices:)
     @server = TCPServer.open(HOST, PORT)
     @devices = devices
-
-    listen.join
   end
 
   def listen
     Thread.new(@server.accept) do |client|
       loop do
-        msg = client.gets
+        msg = client.gets&.chomp
         next if msg.nil?
 
         decoded_message = WebMessage::Request.decode(msg)
@@ -28,9 +26,12 @@ class ServerSocket
           response = WebMessage::Response.new
 
           response.body = @devices.map { |dev| dev[:name] }.join("\n")
-          reponse.type = WebMessage::Response::Type::LIST_DEVICES
+          response.type = WebMessage::Response::Type::LIST_DEVICES
 
-          client.print(WebMessage::Response.encode(response))
+          encoded = WebMessage::Response.encode(response)
+
+          binding.irb
+          client.puts('djfgjhd fjhdsgfhdjsg fjhdsf jhgdsf hfdgjs hjdgfshjgdfshj fgd')
         when :REQUIRE_STATUS
           puts 'require status'
         when :ALTER_STATUS

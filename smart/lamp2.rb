@@ -27,7 +27,7 @@ class Lamp
   end
 
   def identify
-    @multicast_socket.send({ name: 'Lamp', port: SERVER_PORT, message: Messages::SEARCH_RESPONSE }.to_json)
+    @multicast_socket.send({ name: 'Lamp2', port: SERVER_PORT, message: Messages::SEARCH_RESPONSE }.to_json)
   end
 end
 

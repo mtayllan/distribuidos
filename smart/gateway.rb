@@ -9,9 +9,14 @@ class Gateway
   def initialize
     @connected_devices = []
     @multicast_socket = MulticastSocket.new(only_receive: false)
-    ServerSocket.new(devices: @connected_devices)
+
+    server = ServerSocket.new(devices: @connected_devices)
     search
-    listen_multicast.join
+    listen = listen_multicast
+    listen2 = server.listen
+
+    listen.join
+    listen2.join
   end
 
   def search
@@ -22,12 +27,11 @@ class Gateway
     Thread.new do
       loop do
         message, = @multicast_socket.receive
-        binding.irb
         next if message == Messages::SEARCH
 
         parsed_message = JSON.parse(message, symbolize_names: true)
         if parsed_message[:message] == Messages::SEARCH_RESPONSE
-          @connected_devices << parsed_message[:name]
+          @connected_devices << parsed_message
         end
       end
     end
