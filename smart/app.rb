@@ -9,13 +9,13 @@ class App
 
   def initialize
     @server = TCPSocket.open(HOST, PORT)
-    # t1 = prompt
 
+    t1 = prompt
     t2 = listen
     list_devices
 
+    t1.join
     t2.join
-    # t1.join
   end
 
   def prompt
@@ -31,7 +31,7 @@ class App
         option = gets.chomp
 
         case option.to_i
-        when 1j
+        when 1
           list_devices
         when 2
           puts 'alterar'
@@ -47,8 +47,7 @@ class App
   def listen
     Thread.new do
       loop do
-        msg = @server.gets.chomp
-        binding.irb
+        msg = @server.recv(1000)
         next if msg.nil?
 
         decoded_message = WebMessage::Response.decode(msg)
@@ -67,7 +66,7 @@ class App
 
   def list_devices
     request = WebMessage::Request.new(type: WebMessage::Request::Type::LIST_DEVICES)
-    @server.puts(WebMessage::Request.encode(request))
+    @server.send(WebMessage::Request.encode(request), 0)
   end
 end
 

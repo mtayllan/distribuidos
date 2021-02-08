@@ -16,7 +16,7 @@ class ServerSocket
   def listen
     Thread.new(@server.accept) do |client|
       loop do
-        msg = client.gets&.chomp
+        msg = client.recv(1000)
         next if msg.nil?
 
         decoded_message = WebMessage::Request.decode(msg)
@@ -30,8 +30,7 @@ class ServerSocket
 
           encoded = WebMessage::Response.encode(response)
 
-          binding.irb
-          client.puts('djfgjhd fjhdsgfhdjsg fjhdsf jhgdsf hfdgjs hjdgfshjgdfshj fgd')
+          client.send(encoded, 0)
         when :REQUIRE_STATUS
           puts 'require status'
         when :ALTER_STATUS
