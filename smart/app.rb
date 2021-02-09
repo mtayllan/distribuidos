@@ -10,36 +10,35 @@ class App
   def initialize
     @server = TCPSocket.open(HOST, PORT)
 
-    t1 = prompt
-    t2 = listen
-    list_devices
+    t1 = update_output
+    # t2 = receive_commands
+    t3 = listen
 
     t1.join
-    t2.join
+    # t2.join
+    t3.join
   end
 
-  def prompt
+  def update_output
     Thread.new do
-      list_devices
       loop do
-        puts 'O que você deseja fazer?'
-        puts "
-          1 - Listar dispositivos\n
-          2 - Alterar dispositivo\n
-          3 - Ver status de um dispositivo
-        "
-        option = gets.chomp
+        list_devices
+        sleep 1
+      end
+    end
+  end
 
-        case option.to_i
-        when 1
-          list_devices
-        when 2
-          puts 'alterar'
-        when 3
-          puts 'ver status'
-        else
-          puts 'Invalido fodac'
-        end
+  def receive_commands
+    Thread.new do
+      loop do
+        id, state = gets.chomp.split(' ')
+
+        request = WebMessage::Request.new
+        request.target_device_id = id
+        request.state = state
+        request.type = WebMessage::Request::Type::ALTER_STATE
+
+        @server.send(WebMessage::Request.encode(request), 0)
       end
     end
   end
@@ -52,21 +51,21 @@ class App
 
         decoded_message = WebMessage::Response.decode(msg)
 
-        case decoded_message.type
-        when :LIST_DEVICES
-          puts decoded_message.body
-        when :ALTER_STATUS
-          puts msg.body
-        when :REQUIRE_STATUS
-          puts msg.body
-        end
+        output(decoded_message.body)
       end
     end
   end
 
   def list_devices
     request = WebMessage::Request.new(type: WebMessage::Request::Type::LIST_DEVICES)
+    binding.irb
     @server.send(WebMessage::Request.encode(request), 0)
+  end
+
+  def output(msg)
+    $stdout.write("\r#{msg}")
+    $stdout.write("\nDigite o id do dispositivo e o novo valor que deseja colocar.")
+    $stdout.flush
   end
 end
 

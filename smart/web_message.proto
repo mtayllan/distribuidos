@@ -3,21 +3,14 @@ syntax = "proto3";
 package WebMessage;
 message Request {
   enum Type {
-    REQUIRE_STATUS = 0;
-    ALTER_STATUS = 1;
-    LIST_DEVICES = 2;
+    ALTER_STATE = 0;
+    LIST_DEVICES = 1;
   }
   Type type = 1;
-  int32 target_device_id = 2;
+  string target_device_id = 2;
+  string state = 3;
 }
 
 message Response {
-  enum Type {
-    REQUIRE_STATUS = 0;
-    ALTER_STATUS = 1;
-    LIST_DEVICES = 2;
-  }
-  Type type = 1;
-  int32 target_device_id = 2;
-  string body = 3;
+  string body = 1;
 }
