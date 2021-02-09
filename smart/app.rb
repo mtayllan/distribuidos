@@ -58,7 +58,6 @@ class App
 
   def list_devices
     request = WebMessage::Request.new(type: WebMessage::Request::Type::LIST_DEVICES)
-    binding.irb
     @server.send(WebMessage::Request.encode(request), 0)
   end
 

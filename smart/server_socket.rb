@@ -18,7 +18,6 @@ class ServerSocket
     Thread.new(@server.accept) do |client|
       loop do
         msg = client.recv(1000)
-        binding.irb
         next if msg.nil?
 
         decoded_message = WebMessage::Request.decode(msg)
