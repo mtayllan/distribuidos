@@ -14,7 +14,18 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
     value :LIST_DEVICES, 1
   end
   add_message "WebMessage.Response" do
-    optional :body, :string, 1
+    repeated :devices, :message, 1, "WebMessage.Response.Device"
+  end
+  add_message "WebMessage.Response.Device" do
+    optional :id, :string, 1
+    optional :state, :string, 2
+    optional :name, :string, 3
+    optional :state_kind, :enum, 4, "WebMessage.Response.Device.StateKind"
+  end
+  add_enum "WebMessage.Response.Device.StateKind" do
+    value :BOOL, 0
+    value :INT, 1
+    value :DECIMAL, 2
   end
 end
 
@@ -22,4 +33,6 @@ module WebMessage
   Request = Google::Protobuf::DescriptorPool.generated_pool.lookup("WebMessage.Request").msgclass
   Request::Type = Google::Protobuf::DescriptorPool.generated_pool.lookup("WebMessage.Request.Type").enummodule
   Response = Google::Protobuf::DescriptorPool.generated_pool.lookup("WebMessage.Response").msgclass
+  Response::Device = Google::Protobuf::DescriptorPool.generated_pool.lookup("WebMessage.Response.Device").msgclass
+  Response::Device::StateKind = Google::Protobuf::DescriptorPool.generated_pool.lookup("WebMessage.Response.Device.StateKind").enummodule
 end

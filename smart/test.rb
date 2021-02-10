@@ -1,5 +1,3 @@
-require "tty-prompt"
+require './web_message_pb'
 
-prompt = TTY::Prompt.new
-key = prompt.keypress(timeout: 1)
-p key
+binding.irb

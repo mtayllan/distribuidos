@@ -12,5 +12,17 @@ message Request {
 }
 
 message Response {
-  string body = 1;
+  message Device {
+    enum StateKind {
+      BOOL = 0;
+      INT = 1;
+      DECIMAL = 2;
+    }
+
+    string id = 1;
+    string state = 2;
+    string name = 3;
+    StateKind state_kind = 4;
+  }
+  repeated Device devices = 1;
 }

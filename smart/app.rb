@@ -36,17 +36,9 @@ class App
     loop do
       key = @prompt.keypress(timeout: 1) # blocking
       if key.nil?
-        output(@device_list.to_json)
+        output
       else
-        id = @prompt.select('Selecione um dispositivo:', @device_list.map { |dev| dev[:id] })
-        state = @prompt.ask('Digite o novo estado:')
-
-        request = WebMessage::Request.new
-        request.target_device_id = id
-        request.state = state
-        request.type = WebMessage::Request::Type::ALTER_STATE
-
-        @server.send(WebMessage::Request.encode(request), 0)
+        request_update_device
       end
     end
   end
@@ -58,7 +50,7 @@ class App
         next if msg.nil?
 
         decoded_message = WebMessage::Response.decode(msg)
-        @device_list = JSON.parse(decoded_message.body, symbolize_names: true)
+        @device_list = decoded_message.devices
       end
     end
   end
@@ -68,8 +60,20 @@ class App
     @server.send(WebMessage::Request.encode(request), 0)
   end
 
-  def output(msg)
-    @prompt.say("\e[H\e[2J#{msg}\nPressione qualquer tecla para alterar um dispositivo.")
+  def request_update_device
+    id = @prompt.select('Selecione um dispositivo:', @device_list.map(&:id))
+    state = @prompt.ask('Digite o novo estado:')
+
+    request = WebMessage::Request.new
+    request.target_device_id = id
+    request.state = state
+    request.type = WebMessage::Request::Type::ALTER_STATE
+
+    @server.send(WebMessage::Request.encode(request), 0)
+  end
+
+  def output
+    @prompt.say("\e[H\e[2J#{@device_list.to_json}\nPressione qualquer tecla para alterar um dispositivo.")
   end
 end
 

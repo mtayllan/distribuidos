@@ -41,7 +41,14 @@ class ServerSocket
   def send_devices_state(client)
     response = WebMessage::Response.new
 
-    response.body = @devices.map { |dev| dev.except(:client) }.to_json
+    @devices.each do |device|
+      response.devices << WebMessage::Response::Device.new(
+        id: device[:id],
+        state: device[:state].to_s,
+        name: device[:name],
+        state_kind: device[:state_kind]
+      )
+    end
 
     encoded = WebMessage::Response.encode(response)
 
