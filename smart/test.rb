@@ -1,6 +1,5 @@
 require "tty-prompt"
 
 prompt = TTY::Prompt.new
-while (char = prompt.keypress("Press key ?"))
-  puts char
-end
+key = prompt.keypress(timeout: 1)
+p key

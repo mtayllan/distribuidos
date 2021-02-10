@@ -31,7 +31,6 @@ class ServerSocket
         when :ALTER_STATE
           device_id = decoded_message.target_device_id
           device = @devices.find { |dev| dev[:id] == device_id }
-          puts device
           # checar tipos
           device[:client].send({ kind: Messages::ALTER_STATE, state: decoded_message.state }.to_json, 0)
         end

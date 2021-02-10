@@ -28,9 +28,19 @@ module Devices
     end
 
     def alter_state(received_message)
-      @state = received_message[:state]
+      @state = received_message[:state].to_i
 
       send_state
+    end
+
+    def update_state_loop
+      Thread.new do
+        loop do
+          @state += 1
+          send_state
+          sleep 3
+        end
+      end
     end
   end
 end

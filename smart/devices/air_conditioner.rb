@@ -32,16 +32,6 @@ module Devices
 
       send_state
     end
-
-    # def update_state_loop
-    #   Thread.new do
-    #     loop do
-    #       @state += 1
-    #       send_state
-    #       sleep 3
-    #     end
-    #   end
-    # end
   end
 end
 

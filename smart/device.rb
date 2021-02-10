@@ -19,11 +19,15 @@ class Device
   def start
     t1 = listen_multicast
     t2 = listen_server
-    # t3 = update_state_loop
+    t3 = update_state_loop
 
     t1.join
     t2.join
-    # t3.join
+    t3&.join
+  end
+
+  def update_state_loop
+    nil
   end
 
   def listen_multicast
