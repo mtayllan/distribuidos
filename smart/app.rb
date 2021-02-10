@@ -3,6 +3,7 @@
 require 'socket'
 require './web_message_pb'
 require 'tty-prompt'
+require 'tty-table'
 require 'json'
 
 class App
@@ -73,7 +74,16 @@ class App
   end
 
   def output
-    @prompt.say("\e[H\e[2J#{@device_list.to_json}\nPressione qualquer tecla para alterar um dispositivo.")
+    if @device_list.size.zero?
+      @prompt.say("\e[H\e[2JNenhum dispositivo conectado, buscando...")
+    else
+      rows = @device_list.map do |device|
+        [device.name, device.id, device.state]
+      end
+
+      table = TTY::Table.new(%w[Nome ID Estado], rows).render(:unicode, alignments: %i[left left center])
+      @prompt.say("\e[H\e[2J#{table}\nPressione qualquer tecla para alterar um dispositivo.")
+    end
   end
 end
 
