@@ -21,7 +21,8 @@ module Devices
         id: @id,
         name: 'HumiditySensor',
         state_kind: States::INT,
-        state: @state
+        state: @state,
+        kind: :SENSOR
       }
 
       @server_socket.send(message.to_json, 0)

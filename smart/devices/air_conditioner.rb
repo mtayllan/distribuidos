@@ -21,7 +21,8 @@ module Devices
         id: @id,
         name: 'AirConditioner',
         state_kind: States::INT,
-        state: @state
+        state: @state,
+        kind: :ACTUATOR
       }
 
       @server_socket.send(message.to_json, 0)

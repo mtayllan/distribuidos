@@ -18,11 +18,16 @@ message Response {
       INT = 1;
       DECIMAL = 2;
     }
+    enum Kind {
+      SENSOR = 0;
+      ACTUATOR = 1;
+    }
 
     string id = 1;
     string state = 2;
     string name = 3;
     StateKind state_kind = 4;
+    Kind kind = 5;
   }
   repeated Device devices = 1;
 }

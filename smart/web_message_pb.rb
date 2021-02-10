@@ -21,11 +21,16 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
     optional :state, :string, 2
     optional :name, :string, 3
     optional :state_kind, :enum, 4, "WebMessage.Response.Device.StateKind"
+    optional :kind, :enum, 5, "WebMessage.Response.Device.Kind"
   end
   add_enum "WebMessage.Response.Device.StateKind" do
     value :BOOL, 0
     value :INT, 1
     value :DECIMAL, 2
+  end
+  add_enum "WebMessage.Response.Device.Kind" do
+    value :SENSOR, 0
+    value :ACTUATOR, 1
   end
 end
 
@@ -35,4 +40,5 @@ module WebMessage
   Response = Google::Protobuf::DescriptorPool.generated_pool.lookup("WebMessage.Response").msgclass
   Response::Device = Google::Protobuf::DescriptorPool.generated_pool.lookup("WebMessage.Response.Device").msgclass
   Response::Device::StateKind = Google::Protobuf::DescriptorPool.generated_pool.lookup("WebMessage.Response.Device.StateKind").enummodule
+  Response::Device::Kind = Google::Protobuf::DescriptorPool.generated_pool.lookup("WebMessage.Response.Device.Kind").enummodule
 end

@@ -62,7 +62,7 @@ class App
   end
 
   def request_update_device
-    id = @prompt.select('Selecione um dispositivo:', @device_list.map(&:id))
+    id = @prompt.select('Selecione um dispositivo:', @device_list.filter { |dev| dev.kind == :ACTUATOR }.map(&:id))
     state = @prompt.ask('Digite o novo estado:')
 
     request = WebMessage::Request.new

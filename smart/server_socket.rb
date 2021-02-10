@@ -46,7 +46,8 @@ class ServerSocket
         id: device[:id],
         state: device[:state].to_s,
         name: device[:name],
-        state_kind: device[:state_kind]
+        state_kind: device[:state_kind],
+        kind: device[:kind]
       )
     end
 
