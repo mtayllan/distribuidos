@@ -6,7 +6,7 @@ require_relative '../states'
 module Devices
   class HumiditySensor < Device
     def initialize
-      @state = 50
+      @state = 20
       super
     end
 
@@ -31,7 +31,7 @@ module Devices
     def update_state_loop
       Thread.new do
         loop do
-          @state += 1
+          @state += rand(-2..2)
           send_state
           sleep 3
         end
