@@ -10,12 +10,6 @@ module Devices
       super
     end
 
-    def identify
-      return if server_socket.nil?
-
-      send_state
-    end
-
     def send_state
       message = {
         id: @id,

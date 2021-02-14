@@ -48,7 +48,10 @@ class App
     Thread.new do
       loop do
         msg = @server.recv(1000)
-        next if msg.nil?
+        if msg == "\000"
+          @device_list = []
+          next
+        end
 
         decoded_message = WebMessage::Response.decode(msg)
         @device_list = decoded_message.devices

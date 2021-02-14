@@ -15,10 +15,16 @@ class ServerSocket
   end
 
   def listen
-    Thread.new(@server.accept) do |client|
+    Thread.new do
+      client = @server.accept
       loop do
         msg = client.recv(1000)
-        next if msg.nil?
+        if msg.empty?
+          client.close
+
+          client = @server.accept
+          next
+        end
 
         decoded_message = WebMessage::Request.decode(msg)
 
@@ -51,7 +57,10 @@ class ServerSocket
     end
 
     encoded = WebMessage::Response.encode(response)
-
-    client.send(encoded, 0)
+    if encoded.empty?
+      client.send("\000", 0)
+    else
+      client.send(encoded, 0)
+    end
   end
 end

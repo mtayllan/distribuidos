@@ -2,8 +2,7 @@
 
 source 'https://rubygems.org'
 
-git_source(:github) { |repo_name| "https://github.com/#{repo_name}" }
-
+gem 'google-protobuf'
+gem 'ruby_jard'
 gem 'tty-prompt'
-gem 'tty-reader'
 gem 'tty-table'

@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-
 require 'json'
 require './multicast_socket'
 require './messages'
@@ -14,6 +13,12 @@ class Device
     @multicast_socket = MulticastSocket.new
 
     identify
+  end
+
+  def identify
+    return if server_socket.nil?
+
+    send_state
   end
 
   def start
@@ -56,6 +61,10 @@ class Device
         end
 
         message = server_socket.recv(1000)
+        if message.empty?
+          @server_socket = nil
+          next
+        end
 
         parsed_message = JSON.parse(message, symbolize_names: true)
 

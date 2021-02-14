@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-
 require 'json'
 require './multicast_socket'
 require './messages'
@@ -17,11 +16,8 @@ class Gateway
     server = ServerSocket.new(devices: @connected_devices)
     search
 
-    t1 = server.listen
-    t2 = listen_devices
-
-    t1.join
-    t2.join
+    server.listen
+    listen_devices
   end
 
   def search
@@ -32,7 +28,11 @@ class Gateway
     loop do
       Thread.new(@devices_socket.accept) do |client|
         loop do
-          message, = client.recv(1000)
+          message = client.recv(1000)
+          if message.empty?
+            @connected_devices.delete_if { |dev| dev[:client] == client }
+            break
+          end
 
           parsed_message = JSON.parse(message, symbolize_names: true)
           device = @connected_devices.find { |dev| dev[:id] == parsed_message[:id] }

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+require 'ruby_jard'
 
 require_relative '../device'
 require_relative '../states'
@@ -10,12 +11,6 @@ module Devices
       super
     end
 
-    def identify
-      return if server_socket.nil?
-
-      send_state
-    end
-
     def send_state
       message = {
         id: @id,
@@ -25,7 +20,7 @@ module Devices
         kind: :ACTUATOR
       }
 
-      @server_socket.send(message.to_json, 0)
+      server_socket.send(message.to_json, 0)
     end
 
     def alter_state(*)
